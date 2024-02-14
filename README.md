@@ -8,3 +8,7 @@
 1. `cp .env.sample .env`
 1. Change the `.env` file to match your environment
 1. `streamlit run app.py`
+
+## Lessons learned
+1. Basics on LLM (applications and limitations).
+2. How to use ChatGPT API in Python and embed AI chat functions in a Streamlit App.

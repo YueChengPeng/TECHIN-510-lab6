@@ -5,6 +5,11 @@ import streamlit as st
 from llama_index.core import VectorStoreIndex
 from llama_index.llms.openai import OpenAI
 from llama_index.readers.file import PDFReader
+from dotenv import load_dotenv
+
+load_dotenv()
+
+is_pdf_none = True
 
 st.set_page_config(
     page_title="Chat with the PDF",
@@ -19,7 +24,7 @@ if "messages" not in st.session_state.keys():  # Initialize the chat messages hi
         {"role": "assistant", "content": "Ask me a question about your document!"}
     ]
 
-uploaded_file = st.file_uploader("Upload a file")
+uploaded_file = st.file_uploader("Upload a file first")
 if uploaded_file:
     bytes_data = uploaded_file.read()
     with NamedTemporaryFile(delete=False) as tmp:  # open a named temporary file
@@ -30,11 +35,14 @@ if uploaded_file:
             reader = PDFReader()
             docs = reader.load_data(tmp.name)
             llm = OpenAI(
+                api_key=os.getenv("OPENAI_API_KEY"),
+                base_url=os.getenv("OPENAI_API_BASE"),
                 model="gpt-3.5-turbo",
                 temperature=0.0,
-                system_prompt="You are an expert on the content of the document, provide detailed answers to the questions. Use the document to support your answers.",
+                system_prompt="You are an expert on HCI research on textiles. Then provide detailed answers to the questions. Use the document to support your answers.",
             )
             index = VectorStoreIndex.from_documents(docs)
+            is_pdf_none = False
     os.remove(tmp.name)  # remove temp file
 
     if "chat_engine" not in st.session_state.keys():  # Initialize the chat engine
@@ -42,10 +50,13 @@ if uploaded_file:
             chat_mode="condense_question", verbose=False, llm=llm
         )
 
+# if (not is_pdf_none): # If the PDF is not empty
 if prompt := st.chat_input(
     "Your question"
 ):  # Prompt for user input and save to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
+
+
 
 for message in st.session_state.messages:  # Display the prior chat messages
     with st.chat_message(message["role"]):
