@@ -10,7 +10,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 ## What's Included
-- `app.py`: the main streamlit application. __Featuring__: 
+- `app.py`: the main streamlit application. Visit at https://techin510lab6leo.azurewebsites.net/. __Featuring__: 
     - Reading the PDF of the paper via URL, no need to download the PDF file locally. (examples include: https://dl.acm.org/doi/pdf/10.1145/3084863.3084868, https://dl.acm.org/doi/pdf/10.1145/3313831.3376841, https://dl.acm.org/doi/pdf/10.1145/2641248.2666717, etc.)
     - FAQs, including "paper overview", "conclude keywords/key methods", "brainstorm research ideas", and "advantages of this research".
     - Ask any other questions on the given PDF.
