@@ -43,28 +43,31 @@ if pdf_url:
             with st.spinner(
                 text="Loading and indexing the PDF – hang tight! This should take 1-2 minutes."
             ):
-                reader = PDFReader()
-                docs = reader.load_data(tmp.name)
-                llm = OpenAI(
-                    api_key=os.getenv("OPENAI_API_KEY"),
-                    base_url=os.getenv("OPENAI_API_BASE"),
-                    model="gpt-3.5-turbo",
-                    temperature=0.0,
-                    system_prompt="You are an expert on HCI textile research. Provide detailed answers to the questions using the document. Use the document to support your answers."
-                )
-                index = VectorStoreIndex.from_documents(docs)
-                os.remove(tmp.name)  # remove temp file
-
-                if "chat_engine" not in st.session_state.keys():  # Initialize the chat engine
-                    st.session_state.chat_engine = index.as_chat_engine(
-                        chat_mode="condense_question", verbose=False, llm=llm
+                try:
+                    reader = PDFReader()
+                    docs = reader.load_data(tmp.name)
+                    llm = OpenAI(
+                        api_key=os.getenv("OPENAI_API_KEY"),
+                        base_url=os.getenv("OPENAI_API_BASE"),
+                        model="gpt-3.5-turbo",
+                        temperature=0.0,
+                        system_prompt="You are an expert on HCI textile research. Provide detailed answers to the questions using the document. Use the document to support your answers."
                     )
-                    print(st.session_state.chat_engine.stream_chat("tell me about this article").response_gen)
-                    if st.session_state.if_pdf_none:
-                        st.session_state.messages = [
-                            {"role": "assistant", "content": "The PDF has been loaded and indexed. You can now ask questions!"}
-                        ]
-                        st.session_state.if_pdf_none = False
+                    index = VectorStoreIndex.from_documents(docs)
+                    os.remove(tmp.name)  # remove temp file
+
+                    if "chat_engine" not in st.session_state.keys():  # Initialize the chat engine
+                        st.session_state.chat_engine = index.as_chat_engine(
+                            chat_mode="condense_question", verbose=False, llm=llm
+                        )
+                        print(st.session_state.chat_engine.stream_chat("tell me about this article").response_gen)
+                        if st.session_state.if_pdf_none:
+                            st.session_state.messages = [
+                                {"role": "assistant", "content": "The PDF has been loaded and indexed. You can now ask questions!"}
+                            ]
+                            st.session_state.if_pdf_none = False
+                except Exception as e:
+                    st.error(f"An error occurred: {e}, which is likely due to the paper is not open access on the Azure's end. Please try another open access paper. (examples include: https://dl.acm.org/doi/pdf/10.1145/3532106.3533551, https://dl.acm.org/doi/pdf/10.1145/3491101.3503579, https://dl.acm.org/doi/pdf/10.1145/3430524.3440642, https://dl.acm.org/doi/pdf/10.1145/3586183.3606724, etc.)")
 
 # Chat input and message handling remains the same
 if not st.session_state.if_pdf_none:
