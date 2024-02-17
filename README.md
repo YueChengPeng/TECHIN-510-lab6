@@ -11,10 +11,12 @@ pip install -r requirements.txt
 ```
 ## What's Included
 - `app.py`: the main streamlit application. Visit at https://techin510lab6leo.azurewebsites.net/. __Featuring__: 
-    - Reading the PDF of the paper via URL, no need to download the PDF file locally. (examples include: https://dl.acm.org/doi/pdf/10.1145/3532106.3533551, , etc.)
+    - Reading the PDF of the paper via URL, no need to download the PDF file locally. (examples include: https://dl.acm.org/doi/pdf/10.1145/3532106.3533551, https://dl.acm.org/doi/pdf/10.1145/3491101.3503579, https://dl.acm.org/doi/pdf/10.1145/3430524.3440642, https://dl.acm.org/doi/pdf/10.1145/3586183.3606724, etc.)
+  
   > 🛑 Notice
   > 
   > Via the azure link, not all papers can be accessed because the request is sent from Azure server's IP address, which might not have access to this paper (e.g. https://dl.acm.org/doi/abs/10.1145/3084863.3084868).
+  > 
   > One solution is to visit only Open Access papers only (refer to the example links above).
   > Alternative is to clone this repository and run locally. Make sure that your computer is connected via RVPN of your university or directly to the university's WiFi to get access.
     - FAQs, including "paper overview", "conclude keywords/key methods", "brainstorm research ideas", and "advantages of this research".
